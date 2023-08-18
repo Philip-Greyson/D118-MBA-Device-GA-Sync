@@ -1,3 +1,4 @@
 credentials.json
 deviceLog.txt
 token.json
+.vscode/*
