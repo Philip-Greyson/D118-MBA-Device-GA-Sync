@@ -123,8 +123,8 @@ if __name__ == '__main__': # main file execution
                                     print(f'ACTION: Device {serial} at {location} is currently {ga_status}, marked as "{ps_status}" in PS, and will be disabled. GA ID: {ga_device_id}', file=log)
                                     ga_device_id = deviceIDDict.get(serial)
                                     try:
-                                        print() # blank line so it can run without making changes
-                                        # update = service.chromeosdevices().action(customerId='my_customer', resourceId =ga_device_id, body={'action':'disable'}).execute()
+                                        # print() # blank line so it can run without making changes
+                                        update = service.chromeosdevices().action(customerId='my_customer', resourceId =ga_device_id, body={'action':'disable'}).execute()
                                     except Exception as er:
                                         print(f'    ERROR: {er}')
                                         print(f'    ERROR: {er}', file=log)
@@ -141,8 +141,8 @@ if __name__ == '__main__': # main file execution
                                     print(f'    ACTION: Device {serial} at {location} is currently {ga_status}, marked as "{ps_status}" in PS, and will be deprovisioned. GA ID: {ga_device_id}')
                                     print(f'ACTION: Device {serial} at {location} is currently {ga_status}, marked as "{ps_status}" in PS, and will be deprovisioned. GA ID:{ga_device_id}', file=log)
                                     try:
-                                        print() # blank line so it can run without making changes
-                                        # update = service.chromeosdevices().action(customerId='my_customer', resourceId =ga_device_id, body={'action':'deprovision'}).execute()
+                                        # print() # blank line so it can run without making changes
+                                        update = service.chromeosdevices().action(customerId='my_customer', resourceId =ga_device_id, body={'action':'deprovision','deprovisionReason':'same_model_replacement'}).execute()
                                     except Exception as er:
                                         print(f'    ERROR: {er}')
                                         print(f'    ERROR: {er}', file=log)
@@ -158,8 +158,8 @@ if __name__ == '__main__': # main file execution
                                     print(f'    ACTION: Device {serial} at {location} is currently {ga_status}, marked as "{ps_status}" in PS, and will be re-enabled. GA ID: {ga_device_id}')
                                     print(f'ACTION: Device {serial} at {location} is currently {ga_status}, marked as "{ps_status}" in PS, and will be re-enabled. GA ID:{ga_device_id}', file=log)
                                     try:
-                                        print() # blank line so it can run without making changes
-                                        # update = service.chromeosdevices().action(customerId='my_customer', resourceId =ga_device_id, body={'action':'reenable'}).execute()
+                                        # print() # blank line so it can run without making changes
+                                        update = service.chromeosdevices().action(customerId='my_customer', resourceId =ga_device_id, body={'action':'reenable'}).execute()
                                     except Exception as er:
                                         print(f'    ERROR: {er}')
                                         print(f'    ERROR: {er}', file=log)
