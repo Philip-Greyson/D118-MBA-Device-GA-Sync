@@ -1,6 +1,6 @@
 # Needs the google-api-python-client, google-auth-httplib2 and the google-auth-oauthlib
 # pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
-
+# also needs oracledb: pip install oracledb --upgrade
 
 # importing modules
 import oracledb  # used to connect to PowerSchool database
