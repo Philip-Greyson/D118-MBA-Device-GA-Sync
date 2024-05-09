@@ -2,3 +2,4 @@ credentials.json
 deviceLog.txt
 token.json
 .vscode/*
+ruff.toml
