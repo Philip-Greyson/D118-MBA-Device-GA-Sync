@@ -181,10 +181,10 @@ if __name__ == '__main__':  # main file execution
                                 studentSchoolAbbreviation = str(owners[0][1])
                                 ga_device_id = deviceIDDict.get(serial)
                                 currentOU = deviceLocationDict.get(serial)
-                                properOU = '/D118 Students/' + studentSchoolAbbreviation + ' Students' if studentSchoolAbbreviation != "Graduated Students" else '/Retired Devices'  # set the proper OU to be the students sub-ou unless they are in graduated students building then it should go to retired devices
-                                if currentOU != properOU:
-                                    print(f'ACTION: {studentSchoolAbbreviation} Device {serial} checked out to {studentNumber} is currently in {currentOU} but will be moved to {properOU}')
-                                    print(f'ACTION: {studentSchoolAbbreviation} Device {serial} checked out to {studentNumber} is currently in {currentOU} but will be moved to {properOU}', file=log)
+                                properOU = '/D118 Students/' + studentSchoolAbbreviation + ' Students' if studentSchoolAbbreviation != "Graduated Students" else '/WHS Deprovisioned Senior CB'  # set the proper OU to be the students sub-ou unless they are in graduated students building then it should go to the deprovisioned OU
+                                if (currentOU != properOU) and (ps_status not in Deprovision_Statuses):  # check if its not where its supposed to be, unless its deprovisioned
+                                    print(f'INFO: {studentSchoolAbbreviation} Device {serial} checked out to {studentNumber} is currently in {currentOU} but will be moved to {properOU}')
+                                    print(f'INFO: {studentSchoolAbbreviation} Device {serial} checked out to {studentNumber} is currently in {currentOU} but will be moved to {properOU}', file=log)
                                     try:
                                         # print() # filler in case I want to run without the moves occurring
                                         update = service.chromeosdevices().update(customerId='my_customer',deviceId =ga_device_id, body={'orgUnitPath':properOU}, projection='FULL').execute()
