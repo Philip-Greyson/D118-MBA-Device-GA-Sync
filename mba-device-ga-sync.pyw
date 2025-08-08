@@ -71,33 +71,41 @@ if __name__ == '__main__':  # main file execution
                 deviceStatusDict = {}  # dict holding the status for all serial numbers
                 deviceIDDict = {}  # dict holding the google admin internal ID for the devices by serial number
                 deviceLocationDict = {}  # dict holding the OU information for all serial numbers
-                print('Compiling list of all devices in Google Admin, this may take a while')
-                print('Compiling list of all devices in Google Admin, this may take a while', file=log)
+                print('INFO: Compiling list of all devices in Google Admin, this may take a while')
+                print('INFO: Compiling list of all devices in Google Admin, this may take a while', file=log)
 
-                deviceResults = service.chromeosdevices().list(customerId='my_customer',projection='FULL').execute()
-                while deviceListToken is not None:
-                    if deviceListToken == '':
-                        deviceResults = service.chromeosdevices().list(customerId='my_customer',projection='FULL').execute()  # first time run, it doesnt like having any pageToken defined for some reason
-                    else:
-                        deviceResults = service.chromeosdevices().list(customerId='my_customer',pageToken=deviceListToken,projection='FULL').execute()  # subsequent runs with the pageToken defined
+                try:
+                    deviceResults = service.chromeosdevices().list(customerId='my_customer',projection='FULL').execute()
+                    while deviceListToken is not None:
+                        try:
+                            if deviceListToken == '':
+                                deviceResults = service.chromeosdevices().list(customerId='my_customer',projection='FULL').execute()  # first time run, it doesnt like having any pageToken defined for some reason
+                            else:
+                                deviceResults = service.chromeosdevices().list(customerId='my_customer',pageToken=deviceListToken,projection='FULL').execute()  # subsequent runs with the pageToken defined
 
-                    deviceListToken = deviceResults.get('nextPageToken')
-                    devices = deviceResults.get('chromeosdevices', [])  # separate just the devices list from the rest of the result
-                    for device in devices:
-                        status = device.get('status')
-                        deviceId = device.get('deviceId')
-                        serial = device.get('serialNumber')
-                        oulocation = device.get('orgUnitPath')
-                        deviceStatusDict.update({serial: status})  # add the serial : status entry to the dict
-                        deviceIDDict.update({serial : deviceId})  # add the serial : device ID to the dict
-                        deviceLocationDict.update({serial : oulocation})  # add the serial : ou path to the dict
+                            deviceListToken = deviceResults.get('nextPageToken')
+                            devices = deviceResults.get('chromeosdevices', [])  # separate just the devices list from the rest of the result
+                            for device in devices:
+                                status = device.get('status')
+                                deviceId = device.get('deviceId')
+                                serial = device.get('serialNumber')
+                                oulocation = device.get('orgUnitPath')
+                                deviceStatusDict.update({serial: status})  # add the serial : status entry to the dict
+                                deviceIDDict.update({serial : deviceId})  # add the serial : device ID to the dict
+                                deviceLocationDict.update({serial : oulocation})  # add the serial : ou path to the dict
+                        except Exception as er:
+                            print(f'ERROR while getting devices from Google Admin: {er}')
+                            print(f'ERROR while getting devices from Google Admin: {er}', file=log)
+                except Exception as er:
+                    print(f'ERROR while getting initial query of devices from Google Admin: {er}')
+                    print(f'ERROR while getting initial query of devices from Google Admin: {er}', file=log)
 
 
                 # print(deviceStatusDict, file=log) # debug
                 # print(deviceIDDict, file=log) # debug
                 # print(deviceLocationDict, file=log) # debug
-                print('Starting processing of devices from MBA Device Manager')
-                print('Starting processing of devices from MBA Device Manager', file=log)
+                print('INFO: Starting processing of devices from MBA Device Manager')
+                print('INFO: Starting processing of devices from MBA Device Manager', file=log)
 
                 # get a list of devices from MBA device table
                 cur.execute('SELECT u_mba_device.device_name, u_mba_device.serial_number, u_mba_device_status.name, u_mba_device.device_type, u_mba_device.archived, u_mba_device_location.name, u_mba_device_location.parent_locationid, u_mba_device.id FROM u_mba_device LEFT JOIN u_mba_device_status ON u_mba_device.device_statusid = u_mba_device_status.id LEFT JOIN u_mba_device_location ON u_mba_device.locationid = u_mba_device_location.id ORDER BY u_mba_device_location.id')  # do a query for the device name, serial, status, device type, location name, and parent location id and archive status from the mba tables
