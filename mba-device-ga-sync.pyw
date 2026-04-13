@@ -53,7 +53,7 @@ if not creds or not creds.valid:
 
 service = build('admin', 'directory_v1', credentials=creds)
 
-Disabled_Statuses = ['Lost/Stolen']
+Disabled_Statuses = ['Lost', 'Stolen', 'Disabled Loaner']
 Enabled_Statuses = ['Ready to Deploy', 'In Use in Classroom', 'Out to Student', 'Out to Teacher']
 Deprovision_Statuses = ['Broken/Needs Repair', 'Retired/Recycled']
 
